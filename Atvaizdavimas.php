@@ -1,16 +1,24 @@
-
 <?php
 $servername = "localhost";
 $username = "root";
 $password = "";
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password);
+try {
+    $dbh = new PDO('mysql:host=localhost;port=3306;dbname=meniu', $username, $password, array( PDO::ATTR_PERSISTENT => false));
 
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+    $stmt = $dbh->prepare("CALL getname()");
+
+    // call the stored procedure
+    $stmt->execute();
+
+    echo "<B>outputting...</B><BR>";
+    while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
+        echo "output: ".$rs->name."<BR>";
+    }
+    echo "<BR><B>".date("r")."</B>";
+
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
 }
-echo "Connected successfully";
-?>
 

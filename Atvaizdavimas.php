@@ -1,29 +1,4 @@
 <?php
-echo "<table style='border: solid 1px black;'>";
-echo "<tr>id<th>Id</th>pavadinimas<th>Pavadinimas</th>kaina<th>Kaina</th>Grupe</tr>";
-
-class TableRows extends RecursiveIteratorIterator
-{
-    function __construct($it)
-    {
-        parent::__construct($it, self::LEAVES_ONLY);
-    }
-
-    function current()
-    {
-        return "<td style='width:150px;border:1px solid black;'>" . parent::current() . "</td>";
-    }
-
-    function beginChildren()
-    {
-        echo "<tr>";
-    }
-
-    function endChildren()
-    {
-        echo "</tr>" . "\n";
-    }
-}
 
 $servername = "localhost";
 $username = "root";
@@ -39,7 +14,10 @@ try {
 
     echo "<B>outputting...</B><BR>";
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-        echo "output: " . $rs->name . "<BR>";
+        echo "Pavadinimas: " . $rs->pavadinimas . "<BR>";
+        echo "Kaina: " . $rs->kaina . "<BR>";
+        echo "Grupe: " . $rs->grupe . "<BR>";
+        echo "Diena: " . $rs->diena . "<BR>";
     }
     echo "<BR><B>" . date("r") . "</B>";
 
@@ -48,3 +26,25 @@ try {
     die();
 }
 
+try {
+
+    $pavad = $_GET['pavadinimas'];
+    $pavad = $_GET['pavadinimas'];
+    $pavad = $_GET['pavadinimas'];
+    $pavad = $_GET['pavadinimas'];
+
+    $conn = new PDO('mysql:host=localhost;port=3306;dbname=meniu', $username, $password, array(PDO::ATTR_PERSISTENT => false)
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "INSERT INTO meniu (pavadinimas, kaina, grupe, diena)
+    VALUES (".$pavad.",".$kaina.", ".$grope.")";
+    // use exec() because no results are returned
+    $conn->exec($sql);
+    echo "New record created successfully";
+}
+catch(PDOException $e)
+{
+    echo $sql . "<br>" . $e->getMessage();
+}
+
+$conn = null;

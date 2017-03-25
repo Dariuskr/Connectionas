@@ -59,6 +59,7 @@ try {
     $stmt = $conn->prepare("INSERT INTO `meniu` (`pavadinimas`, `kaina`, `grupe`, `diena`) 
     VALUES (? , ? , ?, ?)");
 
+
     // insert a row
     $pavadinimas = "Bulves";
     $kaina = 4.00;

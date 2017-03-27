@@ -4,24 +4,35 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 
-try{
 
-    $pavad = $_GET['pavadinimas'];
+try {
+    $conn = new PDO("mysql:host=localhost;port=3306;dbname=meniu", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // prepare sql and bind parameters
+    $stmt = $conn->prepare("INSERT INTO `meniu` (`pavadinimas`, `kaina`, `grupe`, `diena`)
+    VALUES (? , ? , ?, ?)");
+
+
+    // insert a row
+    $pavadinimas = $_GET['pavadinimas'];
     $kaina = $_GET['kaina'];
     $grupe = $_GET['grupe'];
     $diena = $_GET['diena'];
 
-    $conn = new PDO('mysql:host=localhost;port=3306;dbname=meniu', $username, $password, array(PDO::ATTR_PERSISTENT => false));
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO meniu (pavadinimas, kaina, grupe, diena)
-    VALUES (" . $pavad . "," . $kaina . "," . $grupe . "," . $diena . ")";
-    // use exec() because no results are returned
-    $conn->exec($sql);
-    echo "New record created successfully";
+
+    $stmt->bindParam(1, $pavadinimas);
+    $stmt->bindParam(2, $kaina);
+    $stmt->bindParam(3, $grupe);
+    $stmt->bindParam(4, $diena);
+
+
+    $stmt->execute();
+
+    echo "Sekmingai prideta";
 } catch (PDOException $e) {
-
-    echo $sql . "<br>" . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }
-
 $conn = null;
+

@@ -15,6 +15,7 @@ try {
 
    echo json_encode($rs);
 
+
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();

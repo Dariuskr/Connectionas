@@ -26,29 +26,6 @@ try {
     die();
 }
 
-//try {
-//
-//    $pavad = $_GET['pavadinimas'];
-//    $kaina = $_GET['kaina'];
-//    $grupe = $_GET['grupe'];
-//    $diena = $_GET['diena'];
-//
-//    $conn = new PDO('mysql:host=localhost;port=3306;dbname=meniu', $username, $password, array(PDO::ATTR_PERSISTENT => false)
-//    // set the PDO error mode to exception
-//    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        $sql = "INSERT INTO meniu (pavadinimas, kaina, grupe, diena)
-//    VALUES (".$pavad.",".$kaina.",".$grupe.",".$diena.")";
-//    // use exec() because no results are returned
-//
-//    $conn->exec($sql);
-//    echo "New record created successfully";
-//}
-//catch(PDOException $e)
-//{
-//    echo $sql . "<br>" . $e->getMessage();
-//}
-//
-//$conn = null;
 
 try {
     $conn = new PDO("mysql:host=localhost;port=3306;dbname=meniu", $username, $password);
@@ -56,15 +33,15 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // prepare sql and bind parameters
-    $stmt = $conn->prepare("INSERT INTO `meniu` (`pavadinimas`, `kaina`, `grupe`, `diena`) 
+    $stmt = $conn->prepare("INSERT INTO `meniu` (`pavadinimas`, `kaina`, `grupe`, `diena`)
     VALUES (? , ? , ?, ?)");
 
 
     // insert a row
-    $pavadinimas = "Bulves";
-    $kaina = 4.00;
-    $grupe = "karstas";
-    $diena = 2;
+    $pavadinimas = $_GET['pavadinimas'];
+    $kaina = $_GET['kaina'];
+    $grupe = $_GET['grupe'];
+    $diena = $_GET['diena'];
 
 
     $stmt->bindParam(1, $pavadinimas);
@@ -73,14 +50,31 @@ try {
     $stmt->bindParam(4, $diena);
 
 
-
     $stmt->execute();
 
     echo "Sekmingai prideta";
-}
-catch(PDOException $e)
-{
+} catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
 $conn = null;
+
+
+try {
+    $conn = new PDO("mysql:host=localhost;port=3306;dbname=meniu", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // sql to delete a record
+    $sql = "DELETE FROM meniu WHERE id=2";
+    $preparedStatement = $conn->prepare($sql);
+
+    // use exec() because no results are returned
+    $conn->exec($sql);
+    echo "Sekmingai istrinta";
+} catch (PDOException $e) {
+    echo $sql . "<br>" . $e->getMessage();
+}
+
+$conn = null;
 ?>
+

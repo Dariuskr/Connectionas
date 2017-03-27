@@ -11,15 +11,9 @@ try {
 
     // call the stored procedure
     $stmt->execute();
+    $rs = $stmt->fetch(PDO::FETCH_OBJ);
 
-    echo "<B>Meniu</B><BR>";
-    while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-        echo "Pavadinimas: " . $rs->pavadinimas . "<BR>";
-        echo "Kaina: " . $rs->kaina . "<BR>";
-        echo "Grupe: " . $rs->grupe . "<BR>";
-        echo "Diena: " . $rs->diena . "<BR>";
-    }
-    echo "<BR><B>" . date("r") . "</B>";
+   echo json_encode($rs);
 
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";

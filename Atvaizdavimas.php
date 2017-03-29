@@ -7,7 +7,6 @@ $username = "root";
 $password = "";
 
 
-
 try {
     $dbh = new PDO('mysql:host=localhost;port=3306;dbname=meniu', $username, $password, array(PDO::ATTR_PERSISTENT => false));
 
@@ -15,10 +14,9 @@ try {
 
     // call the stored procedure
     $stmt->execute();
-    $rs = $stmt->fetch(PDO::FETCH_OBJ);
+    $rs = $stmt->fetchAll(PDO::FETCH_OBJ);
 
    echo json_encode($rs);
-
 
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";

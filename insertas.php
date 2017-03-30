@@ -1,7 +1,21 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // return only the headers and not the content
+    // only allow CORS if we're doing a GET - i.e. no saving for now.
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) &&
+        $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] == 'POST') {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, OPTION');
+        header('Access-Control-Allow-Headers: X-PINGOTHER, Content-Type');
+    }
+    exit;
+}
 
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    echo'';
+}
 
 $servername = "localhost";
 $username = "root";
@@ -17,12 +31,14 @@ try {
     $stmt = $conn->prepare("INSERT INTO `meniu` (`pavadinimas`, `kaina`, `grupe`, `diena`)
     VALUES (? , ? , ?, ?)");
 
+    $data = json_decode(file_get_contents('php://input'), true);
+//var_dump($data['pavadinimas']);die;
 
     // insert a row
-    $pavadinimas = $_GET['pavadinimas'];
-    $kaina = $_GET['kaina'];
-    $grupe = $_GET['grupe'];
-    $diena = $_GET['diena'];
+    $pavadinimas = $data['pavadinimas'];
+    $kaina = $data['kaina'];
+    $grupe = $data['grupe'];
+    $diena = $data['diena'];
 
 
     $stmt->bindParam(1, $pavadinimas);
